@@ -1,0 +1,15 @@
+---
+
+const {poke} = Astro.props;
+
+const {img, name} = poke;
+---
+
+
+
+<div class="p-2 border border-red-500 rounded-lg">
+    <img src={img} alt={name}>
+   
+    <h1 class="text-center  bg-red-500 text-white">{name}</h1>
+
+</div>

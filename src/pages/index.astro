@@ -1,5 +1,28 @@
 ---
 
+import Poke from '../components/Poke.astro';
+
+const {offset} = Astro.params;
+
+//let llista = await fetch('https://api.citybik.es/v2/networks/bicing');
+let llista = await fetch('https://pokeapi.co/api/v2/pokemon');
+llista = await llista.json();
+//llista = llista.network.stations;
+const next = llista.next;
+const prev = llista.prev;
+
+llista = llista.results;
+
+const promises = await llista.map(async (poke) => {
+	let item = await fetch(poke.url);
+	item = await item.json();
+	return {name:poke.name, img: item.sprites.other['official-artwork'].front_default}
+})
+
+
+const pokemons = await Promise.all(promises);
+
+
 ---
 
 <html lang="en">
@@ -10,7 +33,15 @@
 		<meta name="generator" content={Astro.generator} />
 		<title>Astro</title>
 	</head>
-	<body>
-		<h1>Astro</h1>
+	<body class="p-[40px]">
+		{offset}
+		<h1 class="text-center text-red-500 p-2 mb-4 text-4xl border border-red-500 rounded-lg">Pokemons</h1>
+		<div class="grid gap-4 grid-cols-5">
+		{pokemons.map(x => <Poke poke={x} />)}
+		</div>
+		<nav class="flex">
+			<a href={prev}>Prev</a>
+			<a href={next}>Next</a>
+		</nav>
 	</body>
 </html>
