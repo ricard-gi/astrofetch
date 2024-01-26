@@ -1,0 +1,11 @@
+---
+const { name } = Astro.params;
+let item = await fetch("https://pokeapi.co/api/v2/pokemon/" + name);
+item = await item.json();
+const img = item.sprites.other["official-artwork"].front_default;
+---
+
+<a href="/">Back</a>
+<br />
+<h1>{name}</h1>
+<img src={img} alt={name} />
