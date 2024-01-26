@@ -1,52 +1,49 @@
 ---
+import Poke from "../components/Poke.astro";
+import Layout from "../layouts/Layout.astro";
 
-import Poke from '../components/Poke.astro';
-
-let offset = Astro.url.searchParams.get('offset') || 0;
+let offset = Astro.url.searchParams.get("offset") || 0;
 
 offset = parseInt(offset);
 
 //let llista = await fetch('https://api.citybik.es/v2/networks/bicing');
-let llista = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=20&offset=${offset}`);
+let llista = await fetch(
+	`https://pokeapi.co/api/v2/pokemon?limit=20&offset=${offset}`,
+);
 llista = await llista.json();
 
-
-
-
-const prev = `?offset=${offset==0 ? 0: offset-20}`;
-const next = `?offset=${offset+20}`;
+const prev = `?offset=${offset == 0 ? 0 : offset - 20}`;
+const next = `?offset=${offset + 20}`;
 
 llista = llista.results;
 
 const promises = await llista.map(async (poke) => {
 	let item = await fetch(poke.url);
 	item = await item.json();
-	return {name:poke.name, img: item.sprites.other['official-artwork'].front_default}
-})
-
+	return {
+		name: poke.name,
+		img: item.sprites.other["official-artwork"].front_default,
+	};
+});
 
 const pokemons = await Promise.all(promises);
-
-
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body class="py-[40px] px-[200px]">
+<Layout title = "Pokemons">
 	
-		<h1 class="text-center text-red-500 p-2 mb-4 text-4xl border border-red-500 rounded-lg">Pokemons</h1>
-		<div class="grid gap-4 grid-cols-5">
-		{pokemons.map(x => <Poke poke={x} />)}
-		</div>
-		<nav class="flex justify-between mt-4">
-			<a href={prev}  class='text-red-500 p-2 text-lg border border-red-500 rounded-lg'>Prev</a>
-			<a href={next}  class='text-red-500 p-2 text-lg border border-red-500 rounded-lg'>Next</a>
-		</nav>
-	</body>
-</html>
+	<div class="grid gap-4 grid-cols-5">
+		{pokemons.map((x) => <Poke poke={x} />)}
+	</div>
+	<nav class="flex justify-between mt-4">
+		<a
+			href={prev}
+			class="text-red-500 p-2 text-lg border border-red-500 rounded-lg"
+			>Prev</a
+		>
+		<a
+			href={next}
+			class="text-red-500 p-2 text-lg border border-red-500 rounded-lg"
+			>Next</a
+		>
+	</nav>
+</Layout>

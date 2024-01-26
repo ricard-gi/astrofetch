@@ -1,11 +1,18 @@
 ---
+import Layout from "../../layouts/Layout.astro";
+
 const { name } = Astro.params;
 let item = await fetch("https://pokeapi.co/api/v2/pokemon/" + name);
 item = await item.json();
 const img = item.sprites.other["official-artwork"].front_default;
 ---
 
-<a href="/">Back</a>
-<br />
-<h1>{name}</h1>
-<img src={img} alt={name} />
+<Layout title={name}>
+    <div class="text-center p-8 border border-red-500 rounded-lg">
+        <img src={img} alt={name} class="m-auto" />
+        <br />
+        <br />
+
+        <a href="/" class=" border border-red-500 rounded-lg p-2 text-red-500 hover:bg-red-100">Back</a>
+    </div>
+</Layout>
