@@ -33,7 +33,7 @@ const pokemons = await Promise.all(promises);
 		<title>Astro</title>
 	</head>
 	<body class="p-[40px]">
-		{offset}
+
 		<h1 class="text-center text-red-500 p-2 mb-4 text-4xl border border-red-500 rounded-lg">Pokemons</h1>
 		<div class="grid gap-4 grid-cols-5">
 		{pokemons.map(x => <Poke poke={x} />)}
